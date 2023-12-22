@@ -97,10 +97,7 @@ class InputSection extends StatelessWidget {
                 ),
                 
                 Expanded(
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    physics : ClampingScrollPhysics(),
-                    child : TextField(
+                  child: TextField(
                     minLines: minLines,
                     maxLines: maxLines,
                     maxLength: maxLength,
@@ -120,7 +117,6 @@ class InputSection extends StatelessWidget {
                         border: InputBorder.none,
                         contentPadding: contentPadding ?? EdgeInsets.zero,
                     ),
-                  ),
                   ),
                 ),
                 SizedBox(
