@@ -326,8 +326,8 @@ class _MentionInputState extends State<MentionInput> {
       child: InputSection(
         controller: _controller,
         focusNode: focusNode,
-        height : widget.height,
-        width : widget.width,
+        height : widget.height!,
+        width : widget.width!,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
         leftInputMargin: widget.leftInputMargin,
