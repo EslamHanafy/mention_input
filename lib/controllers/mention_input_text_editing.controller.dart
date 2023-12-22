@@ -1,26 +1,25 @@
-
 import 'package:flutter/material.dart';
-
-import '../types/types.dart';
+import '../types/types.dart'; // Import your types
 
 class MentionInputTextEditingController extends TextEditingController {
   AllMentionWords _allMentionWords;
   String? _pattern;
 
-  MentionInputTextEditingController(this._allMentionWords)
-      : _pattern = _allMentionWords.keys.isNotEmpty
-            ? "(${_allMentionWords.keys.map((key) => RegExp.escape(key)).join('|')})"
-            : null;
+  // Modified constructor to accept default text
+  MentionInputTextEditingController(this._allMentionWords, {String defaultText = ''})
+      : super(text: defaultText) {
+    _pattern = _allMentionWords.keys.isNotEmpty
+        ? "(${_allMentionWords.keys.map((key) => RegExp.escape(key)).join('|')})"
+        : null;
+  }
 
   set allMentionWords(AllMentionWords mapping) {
     _allMentionWords = mapping;
-
     _pattern = "(${mapping.keys.map((key) => RegExp.escape(key)).join('|')})";
   }
 
   @override
-  TextSpan buildTextSpan(
-      {BuildContext? context, TextStyle? style, bool? withComposing}) {
+  TextSpan buildTextSpan({BuildContext? context, TextStyle? style, bool? withComposing}) {
     var children = <InlineSpan>[];
 
     if (_pattern == null || _pattern == '()') {
@@ -33,7 +32,6 @@ class MentionInputTextEditingController extends TextEditingController {
             final mention = _allMentionWords[match[0]!] ??
                 _allMentionWords[_allMentionWords.keys.firstWhere((element) {
                   final reg = RegExp(element);
-
                   return reg.hasMatch(match[0]!);
                 })]!;
 
