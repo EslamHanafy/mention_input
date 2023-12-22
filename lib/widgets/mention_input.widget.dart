@@ -334,7 +334,7 @@ class _MentionInputState extends State<MentionInput> {
         focusNode: focusNode,
         height : widget.height!,
         width : widget.width!,
-        contentPadding : contentPadding ?? EdgeInsets.zero,
+        contentPadding : widget.contentPadding ?? EdgeInsets.zero,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
         leftInputMargin: widget.leftInputMargin,
