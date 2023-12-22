@@ -95,8 +95,12 @@ class InputSection extends StatelessWidget {
                 SizedBox(
                   width: leftWidgets != null ? leftInputMargin : 0,
                 ),
+                
                 Expanded(
-                  child: TextField(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    physics : NeverScrollableScrollPhysics(),
+                    child : TextField(
                     minLines: minLines,
                     maxLines: maxLines,
                     maxLength: maxLength,
@@ -116,6 +120,7 @@ class InputSection extends StatelessWidget {
                         border: InputBorder.none,
                         contentPadding: contentPadding ?? EdgeInsets.zero,
                     ),
+                  ),
                   ),
                 ),
                 SizedBox(
