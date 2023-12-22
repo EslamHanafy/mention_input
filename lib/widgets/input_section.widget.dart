@@ -87,6 +87,7 @@ class InputSection extends StatelessWidget {
           ),
       child: IntrinsicHeight(
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (!shouldHideLeftWidgets) ...?leftWidgets,
             SizedBox(
