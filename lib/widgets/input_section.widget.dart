@@ -77,32 +77,33 @@ class InputSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height : height,
-      width : width,
+      height: height,
+      width: width,
       padding: padding ?? EdgeInsets.zero,
       decoration: decoration ??
           BoxDecoration(
             borderRadius: borderRadius ?? BorderRadius.circular(16),
             color: color ?? Colors.white,
           ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                if (!shouldHideLeftWidgets) ...?leftWidgets,
-                SizedBox(
-                  width: leftWidgets != null ? leftInputMargin : 0,
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            // Left widgets and spacing
+            if (!shouldHideLeftWidgets) ...leftWidgets!,
+            SizedBox(width: leftWidgets != null ? leftInputMargin : 0),
+
+            // Expanding TextField
+            Expanded(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: height - (padding?.vertical ?? 0),
                 ),
-                
-                Expanded(
-                  child: Flexible (
-                    child : SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child : TextField(
-                    minLines: minLines,
-                    maxLines: maxLines,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  reverse: true,
+                  child: TextField(
+                    minLines: minLines ?? 1,
+                    maxLines: null, // Allow for infinite lines
                     maxLength: maxLength,
                     keyboardType: keyboardType,
                     style: style,
@@ -110,41 +111,35 @@ class InputSection extends StatelessWidget {
                     textAlignVertical: textAlignVertical,
                     textCapitalization: textCapitalization,
                     textDirection: textDirection,
-                    cursorColor: cursorColor,
+                    cursorColor: cursorColor ?? Theme.of(context).cursorColor,
                     controller: controller,
                     focusNode: focusNode,
                     autofocus: autoFocus ?? false,
                     decoration: InputDecoration(
-                        hintStyle: hintStyle,
-                        hintText: placeHolder ?? "Aa",
-                        border: InputBorder.none,
-                        contentPadding: contentPadding ?? EdgeInsets.zero,
-                    ),
-                  ),
+                      hintStyle: hintStyle,
+                      hintText: placeHolder ?? "Enter text",
+                      border: InputBorder.none,
+                      contentPadding: contentPadding ?? EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: rightWidgets != null ? rightInputMargin : 0,
-                ),
-                if (!shouldHideRightWidgets) ...?rightWidgets,
-                shouldShowSendButton && hasSendButton
-                    ? const SizedBox(width: 8)
-                    : const SizedBox(),
-                shouldShowSendButton && hasSendButton
-                    ? IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: sendIcon ?? const Icon(Icons.send),
-                        onPressed: () {
-                          onSend?.call();
-                          if (clearTextAfterSent) controller.clear();
-                        },
-                      )
-                    : const SizedBox(),
-              ],
+              ),
             ),
-          ),
-        ],
+
+            // Right widgets and spacing
+            SizedBox(width: rightWidgets != null ? rightInputMargin : 0),
+            if (!shouldHideRightWidgets) ...rightWidgets!,
+            if (shouldShowSendButton && hasSendButton) 
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: sendIcon ?? const Icon(Icons.send),
+                onPressed: () {
+                  onSend?.call();
+                  if (clearTextAfterSent) controller.clear();
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
