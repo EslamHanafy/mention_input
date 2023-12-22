@@ -72,8 +72,8 @@ class MentionInput extends StatefulWidget {
   MentionInput(
       {super.key,
       required this.mentions,
-       required this.height,
-       required this.width,
+      this.height,
+      this.width,
       this.controller,
       this.suggestionContainerColor,
       this.suggestionContainerPadding,
