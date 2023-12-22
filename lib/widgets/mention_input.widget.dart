@@ -69,6 +69,8 @@ class MentionInput extends StatefulWidget {
   double? height;
   double? width;
 
+  final String defaultText;
+
   MentionInput(
       {super.key,
       required this.mentions,
@@ -112,7 +114,8 @@ class MentionInput extends StatefulWidget {
       this.textAlignVertical,
       this.textCapitalization,
       this.textDirection,
-      this.onSelectedOption
+      this.onSelectedOption,
+      this.defaultText = '',
       });
 
   @override
@@ -261,7 +264,7 @@ class _MentionInputState extends State<MentionInput> {
 
     updateAllMentionWords();
 
-    _controller = MentionInputTextEditingController(allMentionWords);
+    _controller = MentionInputTextEditingController(allMentionWords, defaultText: widget.defaultText);
 
     _controller.addListener(_suggestionListener);
 
