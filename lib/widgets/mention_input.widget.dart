@@ -332,8 +332,8 @@ class _MentionInputState extends State<MentionInput> {
       child: InputSection(
         controller: _controller,
         focusNode: focusNode,
-        height : widget.height!,
-        width : widget.width!,
+        height : widget.height ?? 60,
+        width : widget.width ?? MediaQuery.of(context).size.width,
         contentPadding : widget.contentPadding ?? EdgeInsets.zero,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
