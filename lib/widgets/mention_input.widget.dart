@@ -66,9 +66,14 @@ class MentionInput extends StatefulWidget {
   bool hasSendButton;
   Widget? sendIcon;
 
+  double height;
+  double width;
+
   MentionInput(
       {super.key,
       required this.mentions,
+       required this.height,
+       required this.width,
       this.controller,
       this.suggestionContainerColor,
       this.suggestionContainerPadding,
@@ -321,6 +326,8 @@ class _MentionInputState extends State<MentionInput> {
       child: InputSection(
         controller: _controller,
         focusNode: focusNode,
+        height : widget.height,
+        width : widget.width,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
         leftInputMargin: widget.leftInputMargin,
