@@ -33,6 +33,8 @@ class InputSection extends StatelessWidget {
   final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
   final TextDirection? textDirection;
+  final double height;
+  final double width;
 
   const InputSection(
       {super.key,
@@ -44,6 +46,8 @@ class InputSection extends StatelessWidget {
       required this.controller,
       required this.shouldHideLeftWidgets,
       required this.shouldHideRightWidgets,
+      required this.height,
+      required  this.width,
       this.leftWidgets,
       this.rightWidgets,
       this.onSend,
@@ -65,11 +69,14 @@ class InputSection extends StatelessWidget {
       this.style,
       this.hintStyle,
       this.textAlignVertical,
-      this.textDirection});
+      this.textDirection,
+       });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height : height,
+      width : width,
       padding: padding ?? const EdgeInsets.all(16),
       decoration: decoration ??
           BoxDecoration(
