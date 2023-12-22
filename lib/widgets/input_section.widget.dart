@@ -102,8 +102,8 @@ class InputSection extends StatelessWidget {
                   physics: BouncingScrollPhysics(),
                   reverse: true,
                   child: TextField(
-                    minLines: minLines ?? 1,
-                    maxLines: null, // Allow for infinite lines
+                    minLines: minLines,
+                    maxLines: maxLines, 
                     maxLength: maxLength,
                     keyboardType: keyboardType,
                     style: style,
@@ -111,7 +111,7 @@ class InputSection extends StatelessWidget {
                     textAlignVertical: textAlignVertical,
                     textCapitalization: textCapitalization,
                     textDirection: textDirection,
-                    cursorColor: cursorColor ?? Theme.of(context).cursorColor,
+                    cursorColor: cursorColor,
                     controller: controller,
                     focusNode: focusNode,
                     autofocus: autoFocus ?? false,
@@ -119,7 +119,7 @@ class InputSection extends StatelessWidget {
                       hintStyle: hintStyle,
                       hintText: placeHolder ?? "Enter text",
                       border: InputBorder.none,
-                      contentPadding: contentPadding ?? EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: contentPadding,
                     ),
                   ),
                 ),
