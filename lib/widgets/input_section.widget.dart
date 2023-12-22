@@ -99,7 +99,7 @@ class InputSection extends StatelessWidget {
                 Expanded(
                   child: SingleChildScrollView(
                     reverse: true,
-                    physics : NeverScrollableScrollPhysics(),
+                    physics : ClampingScrollPhysics(),
                     child : TextField(
                     minLines: minLines,
                     maxLines: maxLines,
