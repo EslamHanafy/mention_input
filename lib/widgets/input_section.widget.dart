@@ -23,7 +23,7 @@ class InputSection extends StatelessWidget {
   final bool shouldHideRightWidgets;
   final bool shouldHideLeftWidgets;
   final int? minLines;
-  final int maxLines;
+  final int? maxLines;
   final int? maxLength;
   final Color? cursorColor;
   final TextInputType? keyboardType;
@@ -63,7 +63,7 @@ class InputSection extends StatelessWidget {
       this.cursorColor,
       this.maxLength,
       this.minLines,
-      this.maxLines = null,
+      this.maxLines,
       this.keyboardType,
       this.textCapitalization = TextCapitalization.none,
       this.textAlign = TextAlign.start,
