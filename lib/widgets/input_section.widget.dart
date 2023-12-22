@@ -85,18 +85,7 @@ class InputSection extends StatelessWidget {
             borderRadius: borderRadius ?? BorderRadius.circular(16),
             color: color ?? Colors.white,
           ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                if (!shouldHideLeftWidgets) ...?leftWidgets,
-                SizedBox(
-                  width: leftWidgets != null ? leftInputMargin : 0,
-                ),
-                
-                Expanded(
+      child: Expanded(
                   child: TextField(
                     minLines: minLines,
                     maxLines: maxLines,
@@ -119,28 +108,6 @@ class InputSection extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: rightWidgets != null ? rightInputMargin : 0,
-                ),
-                if (!shouldHideRightWidgets) ...?rightWidgets,
-                shouldShowSendButton && hasSendButton
-                    ? const SizedBox(width: 8)
-                    : const SizedBox(),
-                shouldShowSendButton && hasSendButton
-                    ? IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: sendIcon ?? const Icon(Icons.send),
-                        onPressed: () {
-                          onSend?.call();
-                          if (clearTextAfterSent) controller.clear();
-                        },
-                      )
-                    : const SizedBox(),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
