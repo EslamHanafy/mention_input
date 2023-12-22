@@ -71,6 +71,8 @@ class MentionInput extends StatefulWidget {
 
   final String defaultText;
 
+  EdgeInsetsGeometry? contentPadding;
+
   MentionInput(
       {super.key,
       required this.mentions,
@@ -116,6 +118,7 @@ class MentionInput extends StatefulWidget {
       this.textDirection,
       this.onSelectedOption,
       this.defaultText = '',
+       this.contentPadding,
       });
 
   @override
@@ -331,6 +334,7 @@ class _MentionInputState extends State<MentionInput> {
         focusNode: focusNode,
         height : widget.height!,
         width : widget.width!,
+        contentPadding : contentPadding ?? EdgeInsets.zero,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
         leftInputMargin: widget.leftInputMargin,
