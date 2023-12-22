@@ -85,14 +85,19 @@ class InputSection extends StatelessWidget {
             borderRadius: borderRadius ?? BorderRadius.circular(16),
             color: color ?? Colors.white,
           ),
-      child: Expanded(
-        child : Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IntrinsicHeight(
+            child: Row(
               children: [
                 if (!shouldHideLeftWidgets) ...?leftWidgets,
                 SizedBox(
                   width: leftWidgets != null ? leftInputMargin : 0,
                 ),
-                TextField(
+                
+                Expanded(
+                  child: TextField(
                     minLines: minLines,
                     maxLines: maxLines,
                     maxLength: maxLength,
@@ -113,6 +118,7 @@ class InputSection extends StatelessWidget {
                         contentPadding: contentPadding ?? EdgeInsets.zero,
                     ),
                   ),
+                ),
                 SizedBox(
                   width: rightWidgets != null ? rightInputMargin : 0,
                 ),
@@ -132,7 +138,9 @@ class InputSection extends StatelessWidget {
                     : const SizedBox(),
               ],
             ),
-      )
+          ),
+        ],
+      ),
     );
   }
 }
