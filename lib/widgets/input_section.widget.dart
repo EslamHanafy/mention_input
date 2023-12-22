@@ -35,6 +35,7 @@ class InputSection extends StatelessWidget {
   final TextDirection? textDirection;
   final double height;
   final double width;
+  final EdgeInsetsGeometry? contentPadding;
 
   const InputSection(
       {super.key,
@@ -70,6 +71,7 @@ class InputSection extends StatelessWidget {
       this.hintStyle,
       this.textAlignVertical,
       this.textDirection,
+       this.contentPadding,
        });
 
   @override
@@ -77,7 +79,7 @@ class InputSection extends StatelessWidget {
     return Container(
       height : height,
       width : width,
-      padding: padding ?? const EdgeInsets.all(16),
+      padding: padding ?? EdgeInsets.zero,
       decoration: decoration ??
           BoxDecoration(
             borderRadius: borderRadius ?? BorderRadius.circular(16),
@@ -111,7 +113,9 @@ class InputSection extends StatelessWidget {
                     decoration: InputDecoration(
                         hintStyle: hintStyle,
                         hintText: placeHolder ?? "Aa",
-                        border: InputBorder.none),
+                        border: InputBorder.none,
+                        contentPadding: contentPadding ?? EdgeInsets.zero,
+                    ),
                   ),
                 ),
                 SizedBox(
