@@ -66,8 +66,8 @@ class MentionInput extends StatefulWidget {
   bool hasSendButton;
   Widget? sendIcon;
 
-  double height;
-  double width;
+  double? height;
+  double? width;
 
   MentionInput(
       {super.key,
