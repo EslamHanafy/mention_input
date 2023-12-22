@@ -97,7 +97,10 @@ class InputSection extends StatelessWidget {
                 ),
                 
                 Expanded(
-                  child: TextField(
+                  child: Flexible (
+                    child : SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child : TextField(
                     minLines: minLines,
                     maxLines: maxLines,
                     maxLength: maxLength,
@@ -116,6 +119,8 @@ class InputSection extends StatelessWidget {
                         hintText: placeHolder ?? "Aa",
                         border: InputBorder.none,
                         contentPadding: contentPadding ?? EdgeInsets.zero,
+                    ),
+                  ),
                     ),
                   ),
                 ),
