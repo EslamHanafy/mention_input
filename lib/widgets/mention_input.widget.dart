@@ -73,53 +73,53 @@ class MentionInput extends StatefulWidget {
 
   EdgeInsetsGeometry? contentPadding;
 
-  MentionInput(
-      {super.key,
-      required this.mentions,
-      this.height,
-      this.width,
-      this.controller,
-      this.suggestionContainerColor,
-      this.suggestionContainerPadding,
-      this.suggestionContainerMargin,
-      this.suggestionContainerDecoration,
-      this.suggestionContainerBorderRadius,
-      this.suggestionAlignment = SuggestionAlignment.top,
-      this.placeHolder,
-      this.autoFocus,
-      this.clearTextAfterSent = true,
-      this.leftWidgets,
-      this.rightWidgets,
-      this.leftInputMargin = 8,
-      this.rightInputMargin = 8,
-      this.itemHeight = DEFAULT_ITEM_HEIGHT,
-      this.dividerBetweenItems = true,
-      this.onSend,
-      this.hasSendButton = true,
-      this.textFieldContainerBorderRadius,
-      this.textFieldContainerColor,
-      this.textFieldContainerDecoration,
-      this.textFieldContainerPadding,
-      this.sendIcon,
-      this.itemBuilder,
-      this.shouldHideLeftWidgets = false,
-      this.shouldHideRightWidgets = false,
-      this.onChanged,
-      this.cursorColor,
-      this.keyboardType,
-      this.minLines,
-      this.maxLines,
-      this.maxLength,
-      this.style,
-      this.hintStyle,
-      this.textAlign,
-      this.textAlignVertical,
-      this.textCapitalization,
-      this.textDirection,
-      this.onSelectedOption,
-      this.defaultText = '',
-       this.contentPadding,
-      });
+  MentionInput({
+    super.key,
+    required this.mentions,
+    this.height,
+    this.width,
+    this.controller,
+    this.suggestionContainerColor,
+    this.suggestionContainerPadding,
+    this.suggestionContainerMargin,
+    this.suggestionContainerDecoration,
+    this.suggestionContainerBorderRadius,
+    this.suggestionAlignment = SuggestionAlignment.top,
+    this.placeHolder,
+    this.autoFocus,
+    this.clearTextAfterSent = true,
+    this.leftWidgets,
+    this.rightWidgets,
+    this.leftInputMargin = 8,
+    this.rightInputMargin = 8,
+    this.itemHeight = DEFAULT_ITEM_HEIGHT,
+    this.dividerBetweenItems = true,
+    this.onSend,
+    this.hasSendButton = true,
+    this.textFieldContainerBorderRadius,
+    this.textFieldContainerColor,
+    this.textFieldContainerDecoration,
+    this.textFieldContainerPadding,
+    this.sendIcon,
+    this.itemBuilder,
+    this.shouldHideLeftWidgets = false,
+    this.shouldHideRightWidgets = false,
+    this.onChanged,
+    this.cursorColor,
+    this.keyboardType,
+    this.minLines,
+    this.maxLines,
+    this.maxLength,
+    this.style,
+    this.hintStyle,
+    this.textAlign,
+    this.textAlignVertical,
+    this.textCapitalization,
+    this.textDirection,
+    this.onSelectedOption,
+    this.defaultText = '',
+    this.contentPadding,
+  });
 
   @override
   State<MentionInput> createState() => _MentionInputState();
@@ -267,7 +267,8 @@ class _MentionInputState extends State<MentionInput> {
 
     updateAllMentionWords();
 
-    _controller = MentionInputTextEditingController(allMentionWords, defaultText: widget.defaultText);
+    _controller = MentionInputTextEditingController(allMentionWords,
+        defaultText: widget.defaultText);
 
     _controller.addListener(_suggestionListener);
 
@@ -278,6 +279,24 @@ class _MentionInputState extends State<MentionInput> {
 
       widget.controller!.getText = () {
         return _controller.text;
+      };
+
+      widget.controller!.setDefaultText = (value) {
+        _controller.text = value;
+      };
+
+      widget.controller!.insertSuggestion = (value) {
+        _controller.text = "${_controller.text}${_controller.text.isEmpty ? "" : " "}$value";
+        if (!focusNode.hasFocus) {
+          focusNode.requestFocus();
+          Future.delayed(const Duration(milliseconds: 800), () {
+            _suggestionListener();
+          });
+        } else {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            _suggestionListener();
+          });
+        }
       };
     }
 
@@ -332,9 +351,9 @@ class _MentionInputState extends State<MentionInput> {
       child: InputSection(
         controller: _controller,
         focusNode: focusNode,
-        height : widget.height ?? 60,
-        width : widget.width ?? MediaQuery.of(context).size.width,
-        contentPadding : widget.contentPadding ?? EdgeInsets.zero,
+        height: widget.height ?? 60,
+        width: widget.width ?? MediaQuery.of(context).size.width,
+        contentPadding: widget.contentPadding ?? EdgeInsets.zero,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
         leftInputMargin: widget.leftInputMargin,

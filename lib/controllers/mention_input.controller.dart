@@ -2,13 +2,9 @@ typedef GetTextMethod = String Function();
 
 class MentionInputController {
   late GetTextMethod getText;
-   Function? clearText;
-  
-  String defaultText;
+  Function? clearText;
+  void Function(String)? setDefaultText;
+  void Function(String)? insertSuggestion;
 
-   MentionInputController({this.defaultText = ''});
-
-  void setDefaultText(String text) {
-    defaultText = text;
-  }
+  MentionInputController();
 }

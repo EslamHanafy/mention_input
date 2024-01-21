@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
       isData1 = !isData1;
     });
 
-    controller.clearText();
+    controller.clearText?.call();
   }
 
   @override
@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     MentionInput(
                       // shouldHideRightWidgets: false,
-                      onSelectedOption: (text){
+                      onSelectedOption: (text) {
                         /// selected text
                       },
                       hintStyle: const TextStyle(color: Colors.red),
