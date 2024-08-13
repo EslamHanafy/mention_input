@@ -134,16 +134,18 @@ class _MentionInputState extends State<MentionInput> {
   AllMentionWords allMentionWords = {};
   late String allTriggerAnnotations;
   bool shouldShowSendButton = false;
+  bool isEnd = false;
+  bool isCollapsed = false;
 
   void updateAllMentionWords() {
     for (var mention in widget.mentions) {
       for (var mentionWord in mention.data) {
         allMentionWords["${mention.triggerAnnotation}${mentionWord.display}"] =
             MentionWord(
-          style: mention.highlightStyle,
-          id: mentionWord.id,
-          trigger: mention.triggerAnnotation,
-        );
+              style: mention.highlightStyle,
+              id: mentionWord.id,
+              trigger: mention.triggerAnnotation,
+            );
       }
     }
   }
@@ -188,7 +190,7 @@ class _MentionInputState extends State<MentionInput> {
 
         var gotStartIdxOfWord = (leftChar == " " || leftPos == 0);
         var gotEndIdxOfWord =
-            (rightChar == " " || rightPos == fullText.length - 1);
+        (rightChar == " " || rightPos == fullText.length - 1);
 
         gotWord = gotStartIdxOfWord && gotEndIdxOfWord;
 
@@ -199,26 +201,60 @@ class _MentionInputState extends State<MentionInput> {
       }
 
       final startIdxOfWord =
-          leftPos == 0 && fullText[leftPos] != " " ? 0 : leftPos;
+      leftPos == 0 && fullText[leftPos] != " " ? 0 : leftPos;
       final endIdxOfWord = rightPos + 1;
 
       final selectingWord =
-          fullText.substring(startIdxOfWord, endIdxOfWord).trim();
+      fullText.substring(startIdxOfWord, endIdxOfWord).trim();
 
       if (selectingWord
           .toLowerCase()
-          .startsWith(RegExp(allTriggerAnnotations))) {
-        final currentAnnotation = selectingWord[0];
-        final word = selectingWord.substring(1);
+          .contains(allTriggerAnnotations)) {
+        var currentAnnotation = "";
+        var word = "";
+        if (selectingWord
+            .toLowerCase()
+            .startsWith(allTriggerAnnotations)) {
+          currentAnnotation = selectingWord[0];
+          word = selectingWord.substring(1);
+          isEnd = false;
+          isCollapsed = false;
+        } else if (selectingWord
+            .toLowerCase()
+            .endsWith(allTriggerAnnotations)) {
+          final lastIndex = selectingWord.length - 1;
+          currentAnnotation = selectingWord[lastIndex];
+          word = selectingWord.substring(0, lastIndex);
+          isEnd = true;
+          isCollapsed = false;
+        }else {
+          currentAnnotation = selectingWord.characters.firstWhere((e) =>
+          e.toLowerCase() == allTriggerAnnotations);
+          word = selectingWord.split(currentAnnotation)[1];
+          isEnd = false;
+          isCollapsed = true;
+        }
 
         // TODO: Maybe implement debounce below this line
-
-        suggestionList = widget.mentions
+        final Mention? mention = widget.mentions
+            .where((e) => e.triggerAnnotation == currentAnnotation)
+            .isEmpty ?
+        null
+            : widget.mentions
             .firstWhere(
-                (mention) => mention.triggerAnnotation == currentAnnotation)
-            .data
-            .where((mention) => mention.display.contains(word))
-            .toList();
+                (mention) => mention.triggerAnnotation == currentAnnotation);
+        if (mention != null) {
+          suggestionList = mention
+              .data
+              .where((mention) {
+            if(isCollapsed){
+              return mention.display.toLowerCase().contains(
+                  word.toLowerCase());
+            }
+            return isEnd ? true : mention.display.toLowerCase().contains(
+                word.toLowerCase());
+          }).toList();
+        }
 
         if (suggestionList.isNotEmpty) {
           selectionWord = SelectionWord(
@@ -240,21 +276,33 @@ class _MentionInputState extends State<MentionInput> {
   void addMention(String replaceText) {
     if (selectionWord == null) return;
 
-    final annotation = selectionWord!.text[0];
-    _controller.text = _controller.value.text.replaceRange(
-        selectionWord!.startIdx == 0 ? 0 : selectionWord!.startIdx + 1,
-        selectionWord!.endIdx,
-        "$annotation$replaceText ");
+    try {
+      final annotation = selectionWord!.text.characters.firstWhere((e) =>
+      e.toLowerCase() == allTriggerAnnotations);
+      if (annotation == null) return;
+      final metnionText = "$annotation$replaceText ";
+      int lastIndex = _controller.value.text.lastIndexOf(annotation);
+      final splitText = _controller.value.text.substring(0, lastIndex);
+      // _controller.text = _controller.value.text.replaceRange(
+      //  selectionWord!.text.indexOf(annotation) ,
+      //     isEnd ? null : selectionWord!.endIdx,
+      //     "$annotation$replaceText ");
+      _controller.text = "$splitText$metnionText";
 
-    final startIdx =
-        selectionWord!.startIdx == 0 ? 1 : selectionWord!.startIdx + 2;
+      // final startIdx =
+      // isEnd ? selectionWord!.endIdx - 1 : (selectionWord!.startIdx == 0
+      //     ? 1
+      //     : selectionWord!.startIdx + 2);
 
-    final currentCursor = startIdx + replaceText.length + 1;
+      final currentCursor = _controller.text.length + 1;
 
-    widget.onSelectedOption?.call(replaceText);
+      widget.onSelectedOption?.call(replaceText);
 
-    _controller.selection =
-        TextSelection.fromPosition(TextPosition(offset: currentCursor));
+      _controller.selection =
+          TextSelection.fromPosition(TextPosition(offset: currentCursor));
+    } catch (e) {
+      print("Error add mention: $e");
+    }
 
     focusNode.requestFocus();
 
@@ -286,7 +334,8 @@ class _MentionInputState extends State<MentionInput> {
       };
 
       widget.controller!.insertSuggestion = (value) {
-        _controller.text = "${_controller.text}${_controller.text.isEmpty ? "" : " "}$value";
+        _controller.text =
+        "${_controller.text}${_controller.text.isEmpty ? "" : " "}$value";
         if (!focusNode.hasFocus) {
           focusNode.requestFocus();
           Future.delayed(const Duration(milliseconds: 800), () {
@@ -352,7 +401,8 @@ class _MentionInputState extends State<MentionInput> {
         controller: _controller,
         focusNode: focusNode,
         height: widget.height ?? 60,
-        width: widget.width ?? MediaQuery.of(context).size.width,
+        width: widget.width ?? MediaQuery.sizeOf(context)
+            .width,
         contentPadding: widget.contentPadding ?? EdgeInsets.zero,
         hasSendButton: widget.hasSendButton,
         shouldShowSendButton: shouldShowSendButton,
@@ -381,7 +431,7 @@ class _MentionInputState extends State<MentionInput> {
         textAlign: widget.textAlign ?? TextAlign.start,
         textAlignVertical: widget.textAlignVertical,
         textCapitalization:
-            widget.textCapitalization ?? TextCapitalization.none,
+        widget.textCapitalization ?? TextCapitalization.none,
         textDirection: widget.textDirection,
       ),
     );
